@@ -5,6 +5,7 @@ import axios from 'axios'
 
 const Contents = () => {
 
+    let count=0
     const [confirmedData, setConfirmedData] = useState({})
     const [qurantinedData, setQuarantinedData] = useState({})
     const [comparedData, setComparedData] = useState({})
@@ -33,17 +34,17 @@ const Contents = () => {
                     })
                 }
                 if(findItem && findItem.date < date){
+                    findItem.confirmed = confirmed;
                     findItem.active = active;
                     findItem.death = death;
-                    findItem.date = date;
+                    findItem.recovered = recovered;
                     findItem.year = year;
                     findItem.month = month;
-                    findItem.recovered = recovered;
-                    findItem.confirmed = confirmed;
+                    findItem.date = date;
+                    count++;
                 }
                 return acc;
             }, [])
-            console.log(arr);
             
             const labels = arr.map(a => `${a.month + 1}월`);
             setConfirmedData({
@@ -54,7 +55,7 @@ const Contents = () => {
                         backgroundColor: "salmon",
                         fill: true,
                         data: arr.map(a=>a.confirmed)
-                    }
+                    },
                 ]
             });
             setQuarantinedData({
@@ -83,30 +84,39 @@ const Contents = () => {
                 ]
             });
         }
-        fetchEvents()
-    })
+        fetchEvents();
+    },[count])
     
     return (
         <section>
             <h2>국내 코로나 현황</h2>
             <div className="contents">
                 <div>
-                    <Bar data = {confirmedData} options={
-                        {title: {display:true, text: "누적 확진자 추이", fontSize: 16}},
-                        {legend: {display:true, position: "bottom"}}
-                    }/>
+                    <Bar 
+                    data = {confirmedData} 
+                    options={{
+                        title: {display:true, text: "누적 확진자 추이", fontSize: 16},
+                        legend: {display:true, position: "bottom"}
+                        }}
+                    />
                 </div>
                 <div>
-                    <Line data = {qurantinedData} options={
-                        {title: {display:true, text: "월별 격리자 현황", fontSize: 16}},
-                        {legend: {display:true, position: "bottom"}}
-                    }/>
+                    <Line
+                        data = {qurantinedData}
+                        options={{
+                        title: {display:true, text: "월별 격리자 현황", fontSize: 16},
+                        legend: {display:true, position: "bottom"}
+                        }}
+                    />
                 </div>
                 <div>
-                    <Doughnut data = {comparedData} options={
-                        {title: {display:true, text: `누적, 확진, 해제, 사망 (${new Date().getMonth()+1}월)`, fontSize: 16}},
-                        {legend: {display:true, position: "bottom"}}
-                    }/>
+                    <Doughnut
+                        data = {comparedData}
+                        options={{
+                        title: {display:true, text: `누적, 확진, 해제, 사망 (${new Date().getMonth()+1}월)`, fontSize: 16},
+                        legend: {display:true, position: "bottom"}
+                        }}
+                    />
                 </div>
             </div>
         </section>
