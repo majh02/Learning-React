@@ -28,3 +28,10 @@ section{
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
+.Graph{
+  margin: 10px;
+  padding: 10px 10px;
+  border: 2px solid rgb(59, 89, 152, 0.3);
+  border-radius: 5%/7%;
+}
