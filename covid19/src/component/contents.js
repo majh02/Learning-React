@@ -3,15 +3,15 @@ import {useState, useEffect } from 'react'
 import { Bar, Doughnut, Line } from 'react-chartjs-2'
 import axios from 'axios'
 
-const Contents = () => {
-
+const Contents = ({value}) => {
+    console.log(value)
     const [confirmedData, setConfirmedData] = useState({})
     const [qurantinedData, setQuarantinedData] = useState({})
     const [comparedData, setComparedData] = useState({})
 
     useEffect(()=>{
         const fetchEvents = async() =>{
-            const res = await axios.get("https://api.covid19api.com/total/dayone/country/kr")
+            const res = await axios.get("https://api.covid19api.com/total/dayone/country/"+"kr")
             makeData(res.data)
         }
         const makeData = (items)=>{
@@ -83,7 +83,7 @@ const Contents = () => {
             });
         }
         fetchEvents();
-    },[])
+    },[value])
     
     return (
         <section>
