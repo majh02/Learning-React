@@ -3,8 +3,8 @@ import {useState, useEffect } from 'react'
 import { Bar, Doughnut, Line } from 'react-chartjs-2'
 import axios from 'axios'
 
-const Contents = ({value}) => {
-    console.log(value)
+const Contents = ({contryName}) => {
+    console.log(contryName)
     const [confirmedData, setConfirmedData] = useState({})
     const [qurantinedData, setQuarantinedData] = useState({})
     const [comparedData, setComparedData] = useState({})
@@ -83,7 +83,7 @@ const Contents = ({value}) => {
             });
         }
         fetchEvents();
-    },[value])
+    },[contryName])
     
     return (
         <section>

@@ -4,10 +4,11 @@ import Contents from './Component/Contents'
 import {useState} from 'react'
 
 function App() {
-  const {contryName, setContryName} = useState("kr")
+  const [contryName, setContryName] = useState('kr');
+  console.log(contryName);
   return (
     <div className="App">
-      <Header value = {contryName} onChange={(e)=>setContryName(e.target.value)}/>
+      <Header contryName = {contryName} onChange={(e)=>setContryName(e.target.contryName)}/>
       <Contents contryName = {contryName}/>
     </div>
   );
