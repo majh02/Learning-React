@@ -5,42 +5,74 @@ import './App.css';
 function App() {
 
   let [user, change_user] = useState(['마지혜', 'F'])
-  let [hairsytle, change_hairsytle] = useState([['하트형', '하트형은 넓은 이마와 뾰족한 턱을 가지고 있습니다.', '이마가 넓은 하트 얼굴', 'w_heart.jpg'], ['긴형', '좁고 긴 얼굴형은 가로 길이가 평균보다 짧고 세로 길이는 긴 얼굴입니다.', '좁고 긴 얼굴', 'w_oblong.jpg'], ['둥근형', '둥근 얼굴형은 얼굴의 가로와 세로가 비슷하고 둥근 턱 라인이 특징입니다.', '볼살 많은 둥근 얼굴', 'w_round.jpg'], ['각진형', '광대가 발달한 각진 얼굴은 아래 턱 부분이 넓게 벌어졌다는 것이 특징입니다.', '광대가 있는 각진 얼굴', 'w_square.jpg']]);
+  let [hairstyle, change_hairstyle] = useState([['하트형', '하트형은 넓은 이마와 뾰족한 턱을 가지고 있습니다.', '이마가 넓은 하트 얼굴', 'w_heart.jpg'], ['긴형', '좁고 긴 얼굴형은 가로 길이가 평균보다 짧고 세로 길이는 긴 얼굴입니다.', '좁고 긴 얼굴', 'w_oblong.jpg'], ['둥근형', '둥근 얼굴형은 얼굴의 가로와 세로가 비슷하고 둥근 턱 라인이 특징입니다.', '볼살 많은 둥근 얼굴', 'w_round.jpg'], ['각진형', '광대가 발달한 각진 얼굴은 아래 턱 부분이 넓게 벌어졌다는 것이 특징입니다.', '광대가 있는 각진 얼굴', 'w_square.jpg']]);
+  let [clickedHS, changeHS] = useState(['', '', '', '']);
   let [salon, change_salon] = useState([['이가자 헤어비스', '부산광복점', '겨울특가', '15%', 'Igaza.jpg'], ['이철 헤어커커', '광복롯데점', '겨울방학 할인', '10%', 'Leechul.jpg'], ['조희헤어', '부산역점', '전고객 아로마마사지 무료', '15%', 'JoHee.jpg']]);
   let [designer, change_designer] = useState([['동빈 디자이너', '이가자 헤어비스', 's1d1.jpg'], ['하얀 부원장', '이철 헤어커커', 's1d3.jpg'], ['해나 원장', '조희헤어', 's1d4.jpg']]);
+  let [modal, setModal] = useState(false);
+
   return (
     <div className="App">
       
       <div className="v0_9901">
-        <AIHair_layout user={user} hairsytle={hairsytle}></AIHair_layout>
-        <BestHairshop_layout salon={salon}></BestHairshop_layout>
+        <Top_layout user={user}></Top_layout>
+        <AIHair_layout user={user} hairstyle={hairstyle} setModal={setModal} modal={modal} changeHS={changeHS}></AIHair_layout>
         <BestDesigner_layout designer={designer}></BestDesigner_layout>
+        <BestHairshop_layout salon={salon}></BestHairshop_layout>
+
+        {modal && <ModalPopup setModal={setModal} hairstyle={clickedHS}></ModalPopup>}
       </div>
+      
       <MenuBar></MenuBar>
 
     </div>
   );
 }
 
+//상단 고정 화면
+function Top_layout(props){
+  return(
+    <div className="v0_9943">
+        
+        {/* 위치 설정 */}
+        <button className="v0_9952">
+            <span className="v0_9953">부산광역시 중구</span>
+            <i id='pin_icon' className="fa-solid fa-location-dot"></i>
+        </button>
+        
+        {/* 알림 아이콘 */}
+        <button className="v0_9955" onClick={()=>{alert('알림이 없습니다.');}}>
+            <i id='alert_icon' className="fa-regular fa-bell"></i>
+            <div className="v0_9957"></div>
+            <span className="alert_count">0</span>
+        </button>
+        
+        <span className="v0_9959">안녕하세요 <span className="userName">{props.user[0]} 님,</span></span>
+    </div>
+  );
+}
+
 //AI 헤어분석 레이아웃
 function AIHair_layout(props){
-  console.log(props.user);
   var user = [...props.user];
+  var emoji = '';
+  if (user[1]==='F') {
+    emoji = '💇‍♀️';
+  }
+  else{
+    emoji = '💇‍♂️';
+  }
 
   return(
     <div className="AI">
+      <div style={{display:'flex', justifyContent:'space-between'}}>
         <span className="AI_HairRec">AI 헤어 추천</span>
         <button className="rec" onClick={()=>{}}>추천 받기</button>
+      </div>
 
         <div className="flex_div" style={{display:'flex'}}>
             <div id="emoji" className="recent_result">
-              if ({user[1]}=='F') {
-                <span>💇‍♀️</span>
-              }
-              else{
-                <span>💇‍♂️</span>
-              }
-              
+              <span>{emoji}</span>
             </div>
             
             <div className="recent_result">
@@ -51,7 +83,7 @@ function AIHair_layout(props){
         </div>
 
         <ul className="wrap_ai" style={{listStyle:'none'}}>
-            <AIHair hairsytle={props.hairsytle}></AIHair>
+            <AIHair hairstyle={props.hairstyle} setModal={props.setModal} modal={props.modal} changeHS={props.changeHS}></AIHair>
         </ul>
     </div>
   );
@@ -60,14 +92,13 @@ function AIHair_layout(props){
 // AI헤어추천 컴포넌트
 function AIHair(props){
   var result = [];
-  console.log(props.hairsytle);
-  var hair_arr = [...props.hairsytle];
+  var hair_arr = [...props.hairstyle];
 
   for (let i = 0; i < hair_arr.length; i++) {
     var src_path = 'image/'+hair_arr[i][3];
     result.push(
       <li>
-        <button className="hair_btn">
+        <button className="hair_btn" onClick={()=>{props.setModal(true); props.changeHS(hair_arr[i]);}}>
             <div className="hair">
               <div className="hair_photo">
                   <img src={src_path}></img>
@@ -93,15 +124,11 @@ function AIHair(props){
 // 베스트 헤어샵 레이아웃
 function BestHairshop_layout(props){
   return (
-    <div className="v0_9901">
-      {/* 베스트 헤어샵 */}
-      <div className="best_hairshop">
-          <div className="wrap2">
-            <BestHairshop salon={props}></BestHairshop>
-          </div>
-          {/* <button className="view_all">모두 보기</button> */}
-          <span className="v0_9921">베스트 헤어샵</span>
-      </div>
+    <div className="best_hairshop">
+        <div className="wrap2">
+          <BestHairshop salon={props.salon}></BestHairshop>
+        </div>
+        <span className="v0_9921">베스트 헤어샵</span>
     </div>
   );
 }
@@ -109,7 +136,7 @@ function BestHairshop_layout(props){
 // 베스트 헤어샵 컴포넌트
 function BestHairshop(props){
   const result = [];
-  var salon_arr = [...props.salon.salon];
+  var salon_arr = [...props.salon];
   for (let i = 0; i < salon_arr.length; i++) {
     var src_path = 'image/'+salon_arr[i][4];
     result.push(
@@ -137,7 +164,7 @@ function BestDesigner_layout(props){
     <div className="best_designer">
         <span className="v0_9942">베스트 디자이너</span>
         <ul className="wrap">
-            <BestDesigner designer={props}></BestDesigner>
+            <BestDesigner designer={props.designer}></BestDesigner>
         </ul>
     </div>
   );
@@ -146,8 +173,7 @@ function BestDesigner_layout(props){
 // 베스트 디자이너 컴포넌트
 function BestDesigner(props){
   var result = [];
-  var designer_arr = [...props.designer.designer];
-  // console.log(designer_arr);
+  var designer_arr = [...props.designer];
   for (let i = 0; i < designer_arr.length; i++) {
     var src_path = 'image/'+designer_arr[i][2];
 
@@ -180,7 +206,7 @@ function MenuBar(){
   return (
     // menuBar
     <div className="menuBar">
-        <div className="vI0_9961_0_8175"></div>
+        <div className="menuBar_bg"></div>
 
         {/* main */}
         <button className="main" onClick={()=>{}}>
@@ -210,6 +236,32 @@ function MenuBar(){
             <i id='icon5' className="fa-solid fa-user"></i>
             <span className="icon5_name">프로필</span>
         </button>
+    </div>
+  );
+}
+
+//모달창 팝업
+function ModalPopup(props){
+  var src_path = 'image/'+props.hairstyle[3];
+  console.log(props.hairstyle);
+  return (
+    <div className="modal">
+        <div className="modal_inner" onClick={()=>{props.setModal(false);}}>
+            <button onClick={()=>{props.setModal(false);}}>&times;</button>
+            <div className="modalBox">
+                <div>
+                    <span className="modal_hair_name">{props.hairstyle[0]}</span>
+                </div>
+                <div className="flex_div2">
+                    <div className="img_div"><img src={src_path}></img></div>
+
+                    <div className="block_div">
+                        <div className="exp_div"><span className="modal_hair_exp">{props.hairstyle[1]}</span></div>
+                        <div className="tag_div"><span className="modal_hair_tags">{props.hairstyle[2]}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   );
 }

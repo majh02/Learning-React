@@ -41,7 +41,7 @@ body {
   z-index: 2;
 }
 
-.vI0_9961_0_8175 {
+.menuBar_bg {
   width: 100%;
   height: 68px;
   background: rgb(255, 255, 255);
@@ -495,6 +495,7 @@ body {
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 0px 4px 10px rgb(244, 244, 244);
+  z-index: 2;
 }
 .v0_9944 {
   width: 100%;
@@ -532,6 +533,7 @@ body {
 .AI_HairRec {
   width: fit-content;
   color: rgba(46,58,89,1);
+  float: left;
   margin-left: 5%;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
